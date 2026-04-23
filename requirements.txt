@@ -1,0 +1,44 @@
+# ============================================================
+# RecBole Evaluation Framework — Dependencies
+# ============================================================
+#
+# PyTorch Installation (platform-dependent, install BEFORE pip install -r):
+#
+#   Local (CPU-only, macOS/Linux):
+#     pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cpu
+#
+#   Server (CUDA 11.8):
+#     pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118
+#
+#   Server (CUDA 12.1):
+#     pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu121
+#
+# After installing PyTorch, run:
+#   pip install -r requirements.txt
+# ============================================================
+
+# Core framework
+recbole==1.2.1
+
+# Scientific computing
+numpy==1.26.4
+scipy==1.13.1
+scikit-learn==1.5.0
+pandas==1.5.3
+
+# Configuration & I/O
+PyYAML==6.0.2
+tabulate==0.9.0
+texttable==1.7.0
+
+# Logging & progress
+tqdm==4.66.4
+colorlog==4.7.2
+tensorboard==2.17.0
+
+# Visualization & reporting
+matplotlib==3.9.0
+seaborn==0.13.2
+
+# Utilities
+requests==2.32.3
