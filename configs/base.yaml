@@ -1,0 +1,41 @@
+# ============================================================
+# Base Configuration — shared across all experiments
+# ============================================================
+
+# Reproducibility
+seed: 2024
+reproducibility: True
+state: INFO                        # log verbosity: DEBUG / INFO / WARNING
+
+# GPU
+use_gpu: True                      # overridden to False on CPU-only machines automatically
+
+# Evaluation metrics (Top-K ranking)
+metrics: ['Recall', 'NDCG', 'Hit', 'MRR']
+topk: [5, 10, 20]
+valid_metric: NDCG@10
+
+# Evaluation strategy — Leave-One-Out (standard for sequential rec)
+# Last interaction → test, second-to-last → valid, rest → train
+eval_args:
+  split: {LS: valid_and_test}      # Leave-one-out split
+  group_by: user
+  order: TO                        # Temporal Order (respect timestamp)
+  mode: full                       # Full ranking (all items as negatives)
+
+# Training
+epochs: 300
+train_batch_size: 256
+eval_batch_size: 256
+stopping_step: 20                  # early stopping patience
+learning_rate: 1e-3
+weight_decay: 0.0
+grad_clip_norm: 5.0                # gradient clipping
+
+# Data loading — only interaction data needed for sequential rec
+load_col:
+  inter: [user_id, item_id, timestamp]
+
+# Filtering — 5-core (standard in literature)
+user_inter_num_interval: '[5, inf)'
+item_inter_num_interval: '[5, inf)'

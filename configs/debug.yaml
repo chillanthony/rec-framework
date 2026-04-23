@@ -1,0 +1,21 @@
+# ============================================================
+# Debug Configuration — local CPU testing ONLY
+# Overrides base.yaml to minimize runtime.
+# Purpose: validate code flow correctness, NOT metric quality.
+# ============================================================
+
+use_gpu: False
+
+# Drastically reduce training time
+epochs: 2
+train_batch_size: 64
+eval_batch_size: 64
+stopping_step: 2
+
+# Replace full ranking with sampled evaluation (100 neg items per user)
+# Makes evaluation ~100x faster on CPU
+eval_args:
+  split: {LS: valid_and_test}
+  group_by: user
+  order: TO
+  mode: uni100
