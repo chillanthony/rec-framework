@@ -4,6 +4,54 @@
 
 ---
 
+## TODO
+
+> 当前进度：项目骨架已初始化，仓库已绑定 GitHub。以下为待完成事项，按优先级排列。
+
+### 阶段一：项目骨架搭建
+
+- [x] 初始化 git 仓库并绑定 GitHub（`chillanthony/rec-framework`）
+- [x] 编写 `.gitignore`（排除 dataset/、results/、log/ 等大文件目录）
+- [x] 编写 `README.md`（框架设计说明、测试策略、部署流程）
+- [ ] 导出并提交 `environment.yml` / `requirements.txt`（固定依赖版本）
+- [ ] 创建本地目录：`dataset/`、`results/`、`saved/`、`log/`（不纳入 git）
+
+### 阶段二：配置文件
+
+- [ ] 编写 `configs/base.yaml`（公共配置：seed、metrics、eval_args、负采样）
+- [ ] 编写 `configs/debug.yaml`（本地测试专用：2 epoch、uni100 评估模式）
+- [ ] 编写模型配置：`configs/models/BPR.yaml`、`LightGCN.yaml`、`SASRec.yaml` 等
+- [ ] 编写数据集配置：`configs/datasets/ml-1m.yaml`、`amazon-beauty.yaml` 等
+
+### 阶段三：核心脚本
+
+- [ ] 编写 `scripts/run_single.py`（单模型单数据集运行，支持多 config 文件合并）
+- [ ] 编写 `scripts/run_batch.py`（批量枚举模型 × 数据集，支持 `--dry-run`）
+- [ ] 编写 `scripts/summarize_results.py`（解析 log/ 输出 CSV + LaTeX 表格）
+
+### 阶段四：源码模块
+
+- [ ] 创建 `src/` 目录结构（`custom_models/`、`custom_datasets/`、`utils.py`）
+- [ ] 在 `src/utils.py` 中实现日志解析函数（从 RecBole log 提取指标数值）
+- [ ] （按需）实现自定义模型，继承 RecBole 基类放入 `src/custom_models/`
+
+### 阶段五：本地可用性测试
+
+- [ ] 下载小数据集（如 `ml-100k`）用于本地测试
+- [ ] 本地 CPU 跑通单个模型完整流程（加载→训练→验证→测试→写结果）
+- [ ] 本地跑通 `run_batch.py --dry-run`，确认枚举逻辑正确
+- [ ] 通过本地测试检查清单所有条目
+
+### 阶段六：服务器部署与正式实验
+
+- [ ] 在服务器上还原 conda 环境（`conda env create -f environment.yml`）
+- [ ] 确定数据集上传方案（rsync 断点续传 / 服务器直接 wget）
+- [ ] 上传数据集并验证完整性（`md5sum -c dataset/MANIFEST.md5`）
+- [ ] 服务器跑通完整实验流程（tmux 后台运行）
+- [ ] 验证 `summarize_results.py` 能正确汇总服务器产出的 log
+
+---
+
 ## 目录
 
 - [环境配置](#环境配置)
