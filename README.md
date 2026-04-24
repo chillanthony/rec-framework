@@ -8,15 +8,26 @@
 - [ ] 上传数据集并验证完整性
 - [ ] 服务器跑通完整实验流程（tmux 后台运行）
 
-- [ ] 编写 `scripts/summarize_results.py`（解析 log/ 输出 CSV + LaTeX 表格）
 - [ ] 在 `src/utils.py` 中实现日志解析函数（从 RecBole log 提取指标数值）
-- [ ] （按需）实现自定义模型，继承 RecBole 基类放入 `src/custom_models/`
+- [ ] 编写 `scripts/summarize_results.py`（解析 log/ 输出 CSV + LaTeX 表格）
+- [ ] 实现自定义模型，继承 RecBole 基类放入 `src/custom_models/`
 
 ---
 
 ## 环境配置
 
+先按平台安装 PyTorch，再安装其余依赖：
+
 ```bash
+conda create -n rec-env python=3.11 -y
+
+# 本地（CPU-only，macOS/Linux）
+pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cpu
+
+# 服务器（CUDA 12.1）
+pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu121
+
+# 安装其余依赖
 pip install -r requirements.txt
 ```
 
@@ -48,8 +59,6 @@ rec-framework/
 ├── configs/                  # 实验配置（每个模型/数据集一个 YAML）
 │   ├── base.yaml             # 公共基础配置（seed, metrics, eval_args 等）
 │   ├── models/
-│   │   ├── BPR.yaml
-│   │   ├── LightGCN.yaml
 │   │   └── SASRec.yaml
 │   └── datasets/
 │       ├── amazon-videogames-2023-5c-llo.yaml
@@ -125,17 +134,7 @@ python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-
 
 ### 环境同步
 
-```bash
-# 本地导出环境
-conda env export --no-builds | grep -v "^prefix" > environment.yml
-# 或者只导出 pip 依赖
-pip freeze > requirements.txt
-
-# 服务器上还原
-conda env create -f environment.yml
-# 或
-pip install -r requirements.txt
-```
+参考 "环境配置" 章节，确保服务器环境与本地一致。
 
 ### 代码同步
 
@@ -144,7 +143,7 @@ git push origin main
 # 服务器上
 git clone <your-repo-url>
 # 或
-git pull origin main
+
 
 ### 服务器上运行
 
