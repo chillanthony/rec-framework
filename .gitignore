@@ -18,7 +18,8 @@ env/
 *.ipynb
 
 # Data (large files — upload separately via rsync/scp)
-dataset/
+dataset/*
+!dataset/.gitkeep
 data/
 *.zip
 *.tar.gz
@@ -26,9 +27,14 @@ data/
 *.gz
 
 # RecBole outputs
-log/
-saved/
-results/
+log/*
+!log/.gitkeep
+saved/*
+!saved/.gitkeep
+results/*
+!results/.gitkeep
+log_tensorboard/*
+!log_tensorboard/.gitkeep
 
 # IDE
 .vscode/
