@@ -1,0 +1,26 @@
+# ============================================================
+# GRU4Rec — Gated Recurrent Unit for Session-based Recommendation
+# Paper: Hidasi et al., ICLR 2016
+# RecBole model type: Sequential Recommender
+# ============================================================
+
+model: GRU4Rec
+
+# Model architecture
+embedding_size: 64
+hidden_size: 128
+num_layers: 1
+dropout_prob: 0.3
+
+# Sequence
+MAX_ITEM_LIST_LENGTH: 50
+
+# Loss
+loss_type: CE
+train_neg_sample_args: ~          # explicitly null to disable default negative sampling
+
+# Optimization
+epochs: 300
+learning_rate: 1.0e-3
+train_batch_size: 256
+weight_decay: 0.0

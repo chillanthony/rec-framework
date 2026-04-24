@@ -143,16 +143,8 @@ git push origin main
 # 服务器上
 git clone <your-repo-url>
 # 或
+git pull origin main
 
-
-### 服务器上运行
-
-```bash
-
-tmux new-session -d -s rec_exp "python scripts/run_batch.py"
-tmux attach -t rec_exp
-
-```
 
 ### 数据集上传
 
