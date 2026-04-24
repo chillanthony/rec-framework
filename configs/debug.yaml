@@ -19,3 +19,8 @@ eval_args:
   group_by: user
   order: TO
   mode: uni100
+
+# Use the tiny sampled dataset (200 users) so data loading is near-instant.
+# Generate it once with:  python scripts/make_tiny_dataset.py
+# This overrides any --dataset flag; the pipeline still runs end-to-end.
+dataset: amazon-videogames-2023-5c-llo-tiny

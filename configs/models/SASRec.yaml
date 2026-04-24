@@ -22,6 +22,7 @@ MAX_ITEM_LIST_LENGTH: 50      # maximum history length (truncate older items)
 
 # Loss
 loss_type: CE                 # Cross-Entropy (softmax over all items); BPR also supported
+train_neg_sample_args: ~      # explicitly null to override RecBole's overall.yaml default ({distribution: uniform, ...})
 
 # Optimization
 epochs: 300

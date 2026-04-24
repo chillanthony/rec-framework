@@ -1,0 +1,25 @@
+# ============================================================
+# Dataset: Amazon Reviews 2023 — Video Games
+# Preprocessing: 5-core filtered + leave-last-out split
+# Files: dataset/amazon-videogames-2023-5c-llo/
+# ============================================================
+
+dataset: amazon-videogames-2023-5c-llo
+
+# Field mapping
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+TIME_FIELD: timestamp
+ITEM_LIST_ID_FIELD: item_id_list     # pre-built history sequence
+
+# Load all columns present in the inter files
+load_col:
+  inter: [user_id, item_id, timestamp, item_id_list]
+
+# Tell RecBole to load pre-split files instead of a single .inter file:
+#   amazon-videogames-2023-5c-llo.train.inter
+#   amazon-videogames-2023-5c-llo.valid.inter
+#   amazon-videogames-2023-5c-llo.test.inter
+benchmark_filename: ['train', 'valid', 'test']
+
+
