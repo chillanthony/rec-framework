@@ -144,7 +144,7 @@ git push origin main
 git clone <your-repo-url>
 # 或
 git pull origin main
-
+```
 
 ### 数据集上传
 
@@ -160,3 +160,64 @@ rsync -avz --progress \
 # -z  传输时压缩
 # --progress  显示进度条
 ```
+
+### tmux 实验管理
+
+SSH 断线后实验继续运行的核心手段。所有服务器实验均应在 tmux session 内启动。
+
+
+```bash
+# 创建命名 session 并启动实验
+tmux new -s sasrec
+python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo
+
+# 脱离（实验继续跑，SSH 可安全断开）
+Ctrl+b d
+
+# 回来查看进度
+tmux attach -t sasrec
+```
+
+
+每个模型一个 session，互不干扰：
+
+```bash
+tmux new -s exp_sasrec
+python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo
+# Ctrl+b d
+
+tmux new -s exp_gru4rec
+python scripts/run_single.py --model GRU4Rec --dataset amazon-videogames-2023-5c-llo
+# Ctrl+b d
+
+# 查看所有 session
+tmux ls
+```
+
+在同一 session 内同时查看训练日志和 GPU 状态：
+
+```bash
+tmux new -s exp
+
+# 左侧跑训练
+python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo
+
+# 右侧开新面板（Ctrl+b %），监控 GPU
+watch -n 2 nvidia-smi
+
+# 切换面板
+Ctrl+b ←/→
+```
+
+
+| 操作 | 快捷键 / 命令 |
+|------|--------------|
+| 脱离 session | `Ctrl+b d` |
+| 重连 session | `tmux attach -t <name>` |
+| 列出所有 session | `tmux ls` |
+| 水平分割面板 | `Ctrl+b %` |
+| 垂直分割面板 | `Ctrl+b "` |
+| 切换面板 | `Ctrl+b 方向键` |
+| 关闭当前面板 | `exit` |
+| 强制关闭 session | `tmux kill-session -t <name>` |
+
