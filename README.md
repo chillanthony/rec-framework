@@ -1,17 +1,5 @@
 # RecBole Recommendation System Evaluation Framework
 
-
-## TODO
-
-
-- [ ] 在服务器上还原 conda 环境（`conda env create -f environment.yml`）
-- [ ] 上传数据集并验证完整性
-- [ ] 服务器跑通完整实验流程（tmux 后台运行）
-
-- [ ] 在 `src/utils.py` 中实现日志解析函数（从 RecBole log 提取指标数值）
-- [ ] 编写 `scripts/summarize_results.py`（解析 log/ 输出 CSV + LaTeX 表格）
-- [ ] 实现自定义模型，继承 RecBole 基类放入 `src/custom_models/`
-
 ---
 
 ## 环境配置
