@@ -167,37 +167,6 @@ tmux attach -t sasrec
 ```
 
 
-每个模型一个 session，互不干扰：
-
-```bash
-tmux new -s exp_sasrec
-python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo
-# Ctrl+b d
-
-tmux new -s exp_gru4rec
-python scripts/run_single.py --model GRU4Rec --dataset amazon-videogames-2023-5c-llo
-# Ctrl+b d
-
-# 查看所有 session
-tmux ls
-```
-
-在同一 session 内同时查看训练日志和 GPU 状态：
-
-```bash
-tmux new -s exp
-
-# 左侧跑训练
-python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo
-
-# 右侧开新面板（Ctrl+b %），监控 GPU
-watch -n 2 nvidia-smi
-
-# 切换面板
-Ctrl+b ←/→
-```
-
-
 | 操作 | 快捷键 / 命令 |
 |------|--------------|
 | 脱离 session | `Ctrl+b d` |
