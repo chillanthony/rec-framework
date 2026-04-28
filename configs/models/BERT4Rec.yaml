@@ -27,8 +27,11 @@ MAX_ITEM_LIST_LENGTH: 50
 loss_type: CE
 train_neg_sample_args: ~      # explicitly null to disable default negative sampling
 
-# Optimization
+# Training
 epochs: 300
-learning_rate: 1.0e-3
 train_batch_size: 256
+eval_batch_size: 256
+stopping_step: 20                  # early stopping patience
+learning_rate: 1e-3
 weight_decay: 0.0
+grad_clip_norm: 5.0                # gradient clipping
