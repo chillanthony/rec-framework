@@ -25,4 +25,4 @@ eval_args:
   split: {LS: valid_and_test}      # ignored with pre-split files; kept for fallback
   group_by: user
   order: TO                        # Temporal Order — sort history by timestamp
-  mode: uni100                      
+  mode: full                    
