@@ -8,7 +8,7 @@ model: BERT4Rec
 
 # Model architecture
 n_layers: 2
-n_heads: 8
+n_heads: 2
 hidden_size: 64
 inner_size: 256
 hidden_dropout_prob: 0.2
@@ -18,7 +18,7 @@ layer_norm_eps: 1.0e-12
 initializer_range: 0.02
 
 # BERT4Rec-specific
-mask_ratio: 0.2               # fraction of items randomly masked per sequence
+mask_ratio: 0.4               # fraction of items randomly masked per sequence
 
 # Sequence
 MAX_ITEM_LIST_LENGTH: 50
@@ -32,6 +32,6 @@ epochs: 300
 train_batch_size: 2048
 eval_batch_size: 2048
 stopping_step: 15              # early stopping patience
-learning_rate: 1e-3
+learning_rate: 1e-4
 weight_decay: 0.0
 grad_clip_norm: 5.0                # gradient clipping
