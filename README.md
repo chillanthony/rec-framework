@@ -37,9 +37,11 @@ pip install -r requirements.txt
 > # 正式实验
 > python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo
 > # 本地冒烟测试（CPU、2 epoch、uni100 eval，设置内嵌于 tiny 数据集 yaml）
-> python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo-tiny
+> python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo-tiny --no_wandb
 > # 覆盖任意参数（最高优先级）
 > python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo --params learning_rate=0.005
+> # 关闭 W&B 上报
+> python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo --no_wandb
 > ```
 >
 > `summarize_results.py` 用法速查：
@@ -178,4 +180,27 @@ tmux attach -t sasrec
 | 切换面板 | `Ctrl+b 方向键` |
 | 关闭当前面板 | `exit` |
 | 强制关闭 session | `tmux kill-session -t <name>` |
+
+---
+
+### W&B 实验追踪
+
+每次 `run_single.py` 默认自动上报到 [wandb.ai](https://wandb.ai)，project 名为 `rec-framework`，run 名为 `{model}-{dataset}`。
+
+- 首次配置
+
+```bash
+pip install wandb          # 已含于 requirements.txt
+wandb login                # 浏览器打开，粘贴 API key
+```
+- 结果结构
+
+| 类型 | W&B key 前缀 | 示例 |
+|---|---|---|
+| 完整超参配置 | `config/` | `learning_rate`, `n_layers`, `seed` ... |
+| Best valid 指标 | `valid/` | `valid/ndcg@10`, `valid/recall@10` ... |
+| Test 指标 | `test/` | `test/ndcg@10`, `test/recall@10` ... |
+
+跑完后在 wandb.ai 的 project 页面即可跨 run 对比。
+
 

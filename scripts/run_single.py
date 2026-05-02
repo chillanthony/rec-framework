@@ -35,6 +35,12 @@ import os
 import sys
 from pathlib import Path
 
+try:
+    import wandb
+    _WANDB_AVAILABLE = True
+except ImportError:
+    _WANDB_AVAILABLE = False
+
 # ---------------------------------------------------------------------------
 # Ensure the project root is on sys.path so that `src/` is importable.
 # ---------------------------------------------------------------------------
@@ -163,6 +169,10 @@ def build_parser() -> argparse.ArgumentParser:
             "--params learning_rate=0.005 n_layers=3"
         ),
     )
+    p.add_argument(
+        "--no_wandb", action="store_true",
+        help="Disable W&B logging for this run (e.g. for quick smoke tests).",
+    )
     return p
 
 
@@ -213,6 +223,23 @@ def main():
     logger.info(sys.argv)
     logger.info(config)
 
+    use_wandb = _WANDB_AVAILABLE and not args.no_wandb
+    if use_wandb:
+        import json
+        safe_cfg = {}
+        for k in config:
+            v = config[k]
+            try:
+                json.dumps(v)
+                safe_cfg[k] = v
+            except (TypeError, ValueError):
+                safe_cfg[k] = str(v)
+        wandb.init(
+            project="rec-framework",
+            name=f"{args.model}-{args.dataset}",
+            config=safe_cfg,
+        )
+
     dataset = create_dataset(config)
     logger.info(dataset)
 
@@ -233,6 +260,11 @@ def main():
 
     logger.info(set_color("best valid ", "yellow") + f": {best_valid_result}")
     logger.info(set_color("test result", "yellow") + f": {test_result}")
+
+    if use_wandb:
+        wandb.log({"valid/" + k: v for k, v in best_valid_result.items()})
+        wandb.log({"test/" + k: v for k, v in test_result.items()})
+        wandb.finish()
 
 
 if __name__ == "__main__":
