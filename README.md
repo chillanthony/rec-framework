@@ -41,20 +41,41 @@ pip install -r requirements.txt
 > # 覆盖任意参数（最高优先级）
 > python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo --params learning_rate=0.005
 > ```
+>
+> `summarize_results.py` 用法速查：
+> ```bash
+> # 扫 log/ 下所有 .log，输出 HR@{10,20} + NDCG@{10,20} 对比表到 results/summary.md
+> python scripts/summarize_results.py
+> # 自定义日志根目录与输出路径
+> python scripts/summarize_results.py --log_root log/ --out results/summary.md
+> ```
+> 解析失败的日志（如训练中断、未跑完 test）路径会写入 `results/parse_failures.txt`，不影响主流程。
+
+> `make_tiny_dataset.py` 用法速查：
+> ```bash
+> # 默认：从 amazon-videogames-2023-5c-llo 中采样 200 个用户，写入 *-tiny
+> python scripts/make_tiny_dataset.py
+> # 自定义源数据集与采样规模
+> python scripts/make_tiny_dataset.py --src amazon-scientific-2018 --n_users 100
+> # 指定目标数据集名（默认 <src>-tiny）
+> python scripts/make_tiny_dataset.py --src amazon-videogames-2023-5c-llo --dst my-tiny
+> # 自定义随机种子（保证可复现）
+> python scripts/make_tiny_dataset.py --seed 42
+> ```
 
 ```
 rec-framework/
 ├── configs/                  # 实验配置（每个模型/数据集一个 YAML）
 │   ├── base.yaml             # 公共基础配置（seed, metrics, eval_args 等）
 │   ├── models/
-│   │   └── SASRec.yaml
+│   │   └── ....yaml
 │   └── datasets/
-│       ├── amazon-videogames-2023-5c-llo.yaml
-│       └── amazon-videogames-2023-5c-llo-tiny.yaml  # 本地冒烟测试专用（内嵌 debug 设置），由 make_tiny_dataset.py 生成
+│       ├── ....yaml
 ├── dataset/                  # 数据集目录（不纳入 git，见下方上传策略）
 ├── scripts/
 │   ├── run_single.py         # 运行单个实验
-│   └── make_tiny_dataset.py  # 为任意数据集生成用于 debug 的微型子集
+│   ├── make_tiny_dataset.py  # 为任意数据集生成用于 debug 的微型子集
+│   └── summarize_results.py  # 扫日志，汇总 HR/NDCG@{10,20} 对比表到 Markdown
 ├── src/
 │   ├── custom_models/        # 自定义/改进的模型（继承 RecBole 基类）
 │   ├── custom_datasets/      # 自定义数据预处理逻辑
@@ -65,17 +86,6 @@ rec-framework/
 ├── requirements.txt
 └── README.md
 ```
-
-
-### 关键设计思路
-
-| 问题 | 建议方案 |
-|------|----------|
-| 多次运行取均值 | 在脚本中循环不同 seed，结果取 mean ± std |
-| 超参搜索 | 用 Optuna 或手动网格搜索，在 YAML 中定义候选值 |
-| 实验追踪 | 用 RecBole 内置日志 + `summarize_results.py` 解析；可选接入 W&B |
-| 自定义模型 | 继承 `recbole.model.abstract_recommender` 基类，放入 `src/custom_models/` |
-| 结果汇报 | `summarize_results.py` 输出 LaTeX 表格，直接粘入论文 |
 
 ---
 
@@ -106,15 +116,6 @@ python scripts/make_tiny_dataset.py
 ```bash
 python scripts/run_single.py --model SASRec --dataset amazon-videogames-2023-5c-llo-tiny
 ```
-
--  检查清单
-
-- [ ] 数据集能正确加载（无格式错误）
-- [ ] 前向传播无报错（模型结构正确）
-- [ ] 训练循环完整跑完（loss 正常下降）
-- [ ] 验证集评估正常输出指标
-- [ ] 测试集最终评估结果打印（`best valid` / `test result`）
-- [ ] 日志文件正确生成到 `log/`
 
 ---
 
